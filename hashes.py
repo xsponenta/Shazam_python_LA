@@ -2,7 +2,7 @@ from scipy.io.wavfile import read
 
 from constellations import create_constellation
 
-Fs, audio_input = read("data/001. 24kgoldn - Mood (feat. iann dior).wav")
+Fs, audio_input = read("Rain Over Me.wav")
 
 constellation_map = create_constellation(audio_input, Fs)
 upper_frequency = 23_000

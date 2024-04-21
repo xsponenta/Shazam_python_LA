@@ -5,7 +5,7 @@ import signal
 from scipy.io.wavfile import read
 
 # Зчитуємо аудіофайл та встановлюємо параметри
-Fs, input = read("data/001. 24kgoldn - Mood (feat. iann dior).wav")
+Fs, input = read("Rain Over Me.wav")
 time_to_plot = np.arange(Fs * 1, Fs * 1.5, dtype=int)
 
 # Відображення сигналу в часовій області

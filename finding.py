@@ -3,7 +3,7 @@ from scipy.io.wavfile import read
 from constellations import create_constellation
 from hashes import create_hashes
 
-Fs, audio_input = read("recording2.wav")
+Fs, audio_input = read("Rain Over Me.wav")
 
 constellation = create_constellation(audio_input, Fs)
 hashes = create_hashes(constellation, None)
