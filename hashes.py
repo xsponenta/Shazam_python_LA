@@ -2,9 +2,6 @@ from scipy.io.wavfile import read
 
 from constellations import create_constellation
 
-Fs, audio_input = read("Rain Over Me.wav")
-
-constellation_map = create_constellation(audio_input, Fs)
 upper_frequency = 23_000
 frequency_bits = 10
 
@@ -21,3 +18,6 @@ def create_hashes(constellation_map, song_id=None):
             hash = int(freq_binned) | (int(other_freq_binned) << 10) | (int(diff) << 20)
             hashes[hash] = (time, song_id)
     return hashes
+
+if __name__ == "__main__":
+    print(create_hashes([1,2,3], 2))

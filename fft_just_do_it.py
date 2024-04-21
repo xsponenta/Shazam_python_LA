@@ -16,9 +16,9 @@ def stft(signal, window_length, hop_length):
     num_windows = 1 + (signal_length - window_length) // hop_length
 
     # Ініціалізуємо масив для збереження результату STFT
-    stft_result = np.zeros((num_windows, window_length), dtype=signal.dtype)
+    stft_result = np.zeros((num_windows, window_length), dtype=np.complex128)
 
-    # Цикл по вікнам
+    # Цикл по вікнах
     for i in range(num_windows):
         # Обчислюємо початок та кінець поточного вікна
         start = i * hop_length
@@ -31,11 +31,12 @@ def stft(signal, window_length, hop_length):
         windowed_signal *= np.hanning(window_length)
 
         # Обчислюємо швидке перетворення Фур'є (FFT)
-        stft_result = np.zeros((num_windows, window_length), dtype=np.float64)
+        fft_result = np.fft.fft(windowed_signal)
 
+        # Записуємо результат FFT у відповідний рядок масиву stft_result
+        stft_result[i, :] = fft_result
 
     return stft_result
-
 
 def fftfreq(n, d=1.0):
     """Compute the sample frequencies for an FFT of length n.
@@ -115,11 +116,11 @@ def find_peaks(x, prominence=None, distance=None):
 
     # Apply distance filter
     if distance is not None:
-        filtered_peaks = []
-        filtered_peak_heights = []
-        filtered_left_bases = []
-        filtered_right_bases = []
-        filtered_prominences = []
+        filtered_peaks = [peaks[0]]
+        filtered_peak_heights = [peak_heights[0]]
+        filtered_left_bases = [left_bases[0]]
+        filtered_right_bases = [right_bases[0]]
+        filtered_prominences = [prominences[0]]
 
         for i in range(1, len(peaks)):
             if peaks[i] - peaks[i - 1] >= distance:
@@ -140,3 +141,4 @@ def find_peaks(x, prominence=None, distance=None):
             'prominences': np.array(prominences),
             'left_bases': np.array(left_bases),
             'right_bases': np.array(right_bases)}
+
