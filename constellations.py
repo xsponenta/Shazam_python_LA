@@ -1,9 +1,8 @@
 import numpy as np
-from scipy import signal
 from scipy.io.wavfile import read
-from fft_just_do_it import find_peaks
+from scipy import signal
 
-def create_constellation(audio, Fs, chunk_size=5000):
+def create_constellation(audio, Fs, chunk_size=1000):
     window_length_seconds = 0.05
     window_length_samples = int(window_length_seconds * Fs)
     window_length_samples += window_length_samples % 2
@@ -18,23 +17,33 @@ def create_constellation(audio, Fs, chunk_size=5000):
         amount_to_pad = window_length_samples - chunk.size % window_length_samples
         padded_chunk = np.pad(chunk, (0, amount_to_pad))
 
+        # Зменшуємо розмір вікна nperseg
+        nperseg = min(window_length_samples, len(padded_chunk))
+
         frequencies, times, stft_result = signal.stft(
-            padded_chunk, Fs, nperseg=1024, nfft=window_length_samples, return_onesided=True
+            padded_chunk, Fs, nperseg=nperseg, nfft=nperseg, return_onesided=True
         )
+
+        a = False
 
         for time_idx, window in enumerate(stft_result.T):
             spectrum = abs(window)
-            spectrum = np.squeeze(spectrum).ravel()  # перетворення у 1-D масив
-            print(spectrum.shape)
-
+            spectrum = np.squeeze(spectrum).ravel()
             peaks, props = signal.find_peaks(spectrum, prominence=0)
 
             n_peaks = min(num_peaks, len(peaks))
             largest_peaks = np.argpartition(props["prominences"], -n_peaks)[-n_peaks:]
             for peak in peaks[largest_peaks]:
-                if peak < len(frequencies):
-                    frequency = frequencies[peak]
-                    constellation_map.append([time_idx + start, frequency])
+                frequency = frequencies[peak%len(frequencies)]
+                constellation_map.append([time_idx + start, frequency])
+                if len(constellation_map) >= len(peaks[largest_peaks]):
+                    a = True
+                    break
+            if a == True:
+                break
+        if a == True:
+            break
+
 
     return constellation_map
 
