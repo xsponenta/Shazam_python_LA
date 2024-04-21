@@ -25,13 +25,14 @@ def stft(signal, window_length, hop_length):
         end = start + window_length
 
         # Вирізаємо поточне вікно з сигналу
-        windowed_signal = signal[start:end]
+        windowed_signal = signal[start:end].astype(np.float64)
 
         # Застосовуємо вікно Ханна (Hanning window)
         windowed_signal *= np.hanning(window_length)
 
         # Обчислюємо швидке перетворення Фур'є (FFT)
-        stft_result[i] = fft(windowed_signal, n=window_length)
+        stft_result = np.zeros((num_windows, window_length), dtype=np.float64)
+
 
     return stft_result
 
