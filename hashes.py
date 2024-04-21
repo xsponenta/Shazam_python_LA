@@ -5,7 +5,6 @@ from constellations import create_constellation
 upper_frequency = 23_000
 frequency_bits = 10
 
-
 def create_hashes(constellation_map, song_id=None):
     hashes = {}
     for idx, (time, freq) in enumerate(constellation_map):

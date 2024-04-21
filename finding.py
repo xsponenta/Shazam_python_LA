@@ -3,12 +3,11 @@ from scipy.io.wavfile import read
 from constellations import create_constellation
 from hashes import create_hashes
 
-Fs, audio_input = read("Rain Over Me.wav")
+Fs, audio_input = read("data/Rain Over Me.wav")
 
 constellation = create_constellation(audio_input, Fs)
 hashes = create_hashes(constellation, None)
 
-# %%
 database = pickle.load(open('database.pickle', 'rb'))
 song_index_lookup = pickle.load(open("song_index.pickle", "rb"))
 

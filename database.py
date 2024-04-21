@@ -6,7 +6,7 @@ from scipy.io.wavfile import read
 from constellations import create_constellation
 from hashes import create_hashes
 
-songs = glob.glob('Rain Over Me.wav')
+songs = glob.glob('data/*.wav')
 
 song_index = {}
 database: Dict[int, List[Tuple[int, int]]] = {}
