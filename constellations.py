@@ -1,6 +1,7 @@
 import numpy as np
 from scipy.io.wavfile import read
 from scipy import signal
+from fft_just_do_it import *
 
 def create_constellation(audio, Fs, chunk_size=1000):
     window_length_seconds = 0.05
@@ -17,10 +18,9 @@ def create_constellation(audio, Fs, chunk_size=1000):
         amount_to_pad = window_length_samples - chunk.size % window_length_samples
         padded_chunk = np.pad(chunk, (0, amount_to_pad))
 
-        # Зменшуємо розмір вікна nperseg
         nperseg = min(window_length_samples, len(padded_chunk))
 
-        frequencies, times, stft_result = signal.stft(
+        frequencies, times, stft_result = stft(
             padded_chunk, Fs, nperseg=nperseg, nfft=nperseg, return_onesided=True
         )
 
@@ -48,6 +48,6 @@ def create_constellation(audio, Fs, chunk_size=1000):
     return constellation_map
 
 if __name__ == "__main__":
-    Fs, audio_input = read("Rain Over Me.wav")
+    Fs, audio_input = read("data/Rain Over Me.wav")
     constellation = create_constellation(audio_input, Fs)
     print(constellation)

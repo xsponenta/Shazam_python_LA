@@ -3,7 +3,7 @@ from scipy.io.wavfile import read
 from constellations import create_constellation
 from hashes import create_hashes
 
-Fs, audio_input = read("data/Rain Over Me.wav")
+Fs, audio_input = read("video.wav")
 
 constellation = create_constellation(audio_input, Fs)
 hashes = create_hashes(constellation, None)
@@ -44,5 +44,5 @@ def score_songs(hashes):
 
 scores = score_songs(hashes)
 for song_index, score in scores:
-    print(f"{song_index_lookup[song_index]=}: Score of {score[1]} at {score[0]}")
+    print(f"{song_index_lookup[song_index]=}")
 
