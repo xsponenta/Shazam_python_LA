@@ -4,36 +4,26 @@ def fft(signal, n=None):
     if n is None:
         n = len(signal)
 
-    # Згортка сигналу з комплексною експонентою
     return np.sum(signal * np.exp(-2j * np.pi * np.arange(n) / n)[:, None], axis=0)
 
 
 def stft(signal, window_length, hop_length):
-    # Розмір сигналу
     signal_length = len(signal)
 
-    # Кількість вікон STFT
     num_windows = 1 + (signal_length - window_length) // hop_length
 
-    # Ініціалізуємо масив для збереження результату STFT
     stft_result = np.zeros((num_windows, window_length), dtype=np.complex128)
 
-    # Цикл по вікнах
     for i in range(num_windows):
-        # Обчислюємо початок та кінець поточного вікна
         start = i * hop_length
         end = start + window_length
 
-        # Вирізаємо поточне вікно з сигналу
         windowed_signal = signal[start:end].astype(np.float64)
 
-        # Застосовуємо вікно Ханна (Hanning window)
         windowed_signal *= np.hanning(window_length)
 
-        # Обчислюємо швидке перетворення Фур'є (FFT)
         fft_result = np.fft.fft(windowed_signal)
 
-        # Записуємо результат FFT у відповідний рядок масиву stft_result
         stft_result[i, :] = fft_result
 
     return stft_result
@@ -66,33 +56,27 @@ def find_peaks(x, prominence=None, distance=None):
     right_bases = []
     prominences = []
 
-    # Find peaks
     for i in range(1, len(x) - 1):
         if x[i] > x[i - 1] and x[i] > x[i + 1]:
             peaks.append(i)
             peak_heights.append(x[i])
 
-    # Calculate left and right bases, and prominences
     for peak in peaks:
         left_base = peak
         right_base = peak
         prominence_value = x[peak]
 
-        # Find left base
         while left_base > 0 and x[left_base] <= x[left_base - 1]:
             left_base -= 1
         left_bases.append(left_base)
 
-        # Find right base
         while right_base < len(x) - 1 and x[right_base] <= x[right_base + 1]:
             right_base += 1
         right_bases.append(right_base)
 
-        # Calculate prominence
         prominence_value -= min(x[left_base], x[right_base])
         prominences.append(prominence_value)
 
-    # Apply prominence filter
     if prominence is not None:
         filtered_peaks = []
         filtered_peak_heights = []
@@ -114,7 +98,6 @@ def find_peaks(x, prominence=None, distance=None):
         right_bases = filtered_right_bases
         prominences = filtered_prominences
 
-    # Apply distance filter
     if distance is not None:
         filtered_peaks = [peaks[0]]
         filtered_peak_heights = [peak_heights[0]]
